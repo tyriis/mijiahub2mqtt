@@ -1,0 +1,23 @@
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+/.vscode
+
+ # System Files
+.DS_Store
+Thumbs.db
+
+# log files
+/log/*.log
+
+/*.nyc_output
+/coverage
+/build
+
+# env file
+/*.env
+
+# sonarlint
+/.sonarlint

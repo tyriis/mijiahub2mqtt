@@ -1,0 +1,48 @@
+{
+  "name": "ts.xiaomi2mqtt",
+  "version": "0.0.1",
+  "description": "xiaomi mijia hub mqtt bridge",
+  "main": "index.js",
+  "scripts": {
+    "main": "node -r ts-node/register ./src/index.ts",
+    "test": "NODE_ENV=test nyc mocha -r ts-node/register src/*.spec.ts src/**/*.spec.ts",
+    "coverage": "http-server ./coverage",
+    "start": "node -r ts-node/register ./src/index.ts",
+    "dev": "nodemon --config nodemon.json",
+    "build": "rm -rf build && tsc && cp -r resources build",
+    "lint": "eslint \"src/**/*.ts\" --ignore-pattern \"src/**/*.spec.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" --fix --ignore-pattern \"src/**/*.spec.ts\"",
+    "service": "node --max-old-space-size=4096 ./build/index.js"
+  },
+  "keywords": ["xiaomi", "mijia", "mqtt", "bridge", "xiaomi2mqtt"],
+  "author": "Nils Müller <nils@mueller.name>",
+  "license": "MIT",
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/chai": "^4.2.12",
+    "@types/chai-as-promised": "^7.1.3",
+    "@types/dotenv": "^8.2.0",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.27",
+    "@types/sinon-chai": "^3.2.4",
+    "@typescript-eslint/eslint-plugin": "^3.7.1",
+    "@typescript-eslint/parser": "^3.7.1",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^7.5.0",
+    "http-server": "^0.12.3",
+    "mocha": "^8.0.1",
+    "nodemon": "^2.0.4",
+    "nyc": "^15.1.0",
+    "ts-mockito": "^2.6.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@strg/logging-winston": "^1.0.6",
+    "async-mqtt": "^2.6.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "winston": "^3.3.3"
+  }
+}

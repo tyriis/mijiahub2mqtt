@@ -1,0 +1,38 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": false,
+  "check-coverage": true,
+  "include": [
+    "src/api/**",
+    "src/service/**",
+    "scr/dao/**"
+  ],
+  "exclude": [
+    "src/error/**",
+    "src/model/**",
+    "src/util/**",
+    "src/*.spec.ts",
+    "src/**/*.spec.ts",
+    "src/index.ts",
+    "build/**"
+  ],
+  "extension": [
+    ".ts",
+    ".tsx"
+  ],
+  "require": [
+    "ts-node/register"
+  ],
+  "reporter": [
+    "text-summary",
+    "html"
+  ],
+  "sourceMap": true,
+  "instrument": true,
+  "watermarks": {
+    "lines": [80, 90],
+    "functions": [80, 100],
+    "branches": [80, 100],
+    "statements": [80, 90]
+  }
+}

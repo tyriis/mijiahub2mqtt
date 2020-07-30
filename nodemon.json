@@ -1,0 +1,17 @@
+{
+  "verbose": true,
+  "debug": false,
+  "exec": "node $NODE_DEBUG_OPTION -r ts-node/register ./src/index.ts",
+  "ignore": [
+    "src/**/*.spec.ts",
+    "src/*.spec.ts"
+  ],
+  "events": {
+    "restart": "echo \"[Warning] Remember run npm run test before push to server!\""
+  },
+  "watch": [
+    "./src"
+  ],
+  "ext": "ts",
+  "inspect": true
+}
