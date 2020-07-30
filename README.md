@@ -13,7 +13,7 @@ inspired by [zigbee2mqtt](https://www.zigbee2mqtt.io/) and [node-xiaomi-smart-ho
 
 #### Installation
 ```bash
-make install
+npm install
 ```
 
 
