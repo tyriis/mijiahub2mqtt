@@ -27,7 +27,7 @@ export class BridgeMQTT implements BridgeDAO {
     this.client = MQTT.connect(this.options.url, {
       will: {
         topic: `${this.options.baseTopic}/bridge/state`,
-        payload: '0',
+        payload: 'offline',
         qos: this.options.qos,
         retain: true
       },
@@ -78,7 +78,7 @@ export class BridgeMQTT implements BridgeDAO {
   private onConnect(): void {
     logger.info(`DAO: connected to ${this.options.url}`)
 
-    this.client.publish(`${this.options.baseTopic}/bridge/state`, '1', {
+    this.client.publish(`${this.options.baseTopic}/bridge/state`, 'online', {
       qos: this.options.qos,
       retain: true,
     })

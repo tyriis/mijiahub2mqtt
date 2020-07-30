@@ -24,6 +24,7 @@ npm install
 | **NODE_ENV** | _`production`_, _`development`_, _`test`_ | _`development`_ |
 | **MQTT_BASE_TOPIC** | the mqtt base topic | `xiaomi2mqtt` |
 | **MQTT_URL**\* | mqtt server url |  |
+| **MQTT_QOS** | mqtt QoS: _`0`_, _`1`_, _`2`_ | `0` |
 | **NODE_LOG_FORMAT** | _`SIMPLE`_, _`JSON`_ | `JSON` |
 | **NODE_LOG_LEVEL** | _`fatal`_,  _`error`_, _`warn`_, _`info`_, _`trace`_, _`debug`_ | `info` |
 (\*) required
