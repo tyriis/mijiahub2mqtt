@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "target": "ESNext",
     "module": "commonjs",
     "allowJs": true,
@@ -15,8 +16,7 @@
     "skipLibCheck": true,
     "watch": false,
     "esModuleInterop": true,
-    "noEmitOnError": true,
-    "resolveJsonModule": true
+    "noEmitOnError": true
   },
   "include": [
     "src/**/*.ts"

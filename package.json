@@ -1,5 +1,5 @@
 {
-  "name": "ts.xiaomi2mqtt",
+  "name": "xiaomi2mqtt",
   "version": "0.0.1",
   "description": "xiaomi mijia hub mqtt bridge",
   "main": "index.js",

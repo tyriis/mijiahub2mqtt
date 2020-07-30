@@ -10,7 +10,8 @@ import { BridgeServiceImpl } from './service/bridge.service.impl'
 import { BridgeDAO } from './dao/bridge.dao'
 import { BridgeMQTT } from './dao/bridge.mqtt'
 import { BridgeMqttOptions } from './dao/bridge.mqtt.options'
-import * as pkg from '../package.json'
+
+logger.info(process.env.npm_package_name)
 
 // const NODE_ENV: string = process.env.NODE_ENV || 'development'
 // const PORT: number = Number(process.env.PORT) || 3000
@@ -18,9 +19,10 @@ const MQTT_BASE_TOPIC: string = process.env.MQTT_BASE_TOPIC || 'xiaomi2mqtt'
 const MQTT_URL: string | undefined = process.env.MQTT_URL
 const MQTT_QOS: number = Number(process.env.MQTT_QOS) || 0
 
-const APP: string = 'xiaomi2mqtt'
+const APP: string = process.env.npm_package_name || 'xiaomi2mqtt'
+const VERSION: string =  process.env.npm_package_version || 'unknown'
 
-logger.info(`APP: starting ${APP} ${pkg.version}...`)
+logger.info(`APP: starting ${APP} ${VERSION}...`)
 
 const mqttOptions: BridgeMqttOptions = {
   baseTopic: MQTT_BASE_TOPIC,
@@ -42,7 +44,7 @@ async function stop(): Promise<void> {
 
 // handle unexpected app shutdown
 process.on('SIGINT', () => {
-  logger.info(`APP: Shutdown crawler ${APP} ${pkg.version} with signal SIGINT`)
+  logger.info(`APP: Shutdown crawler ${APP} ${VERSION} with signal SIGINT`)
   stop().then(() => {
     process.exit(0)
   }).catch(() => {
@@ -52,7 +54,7 @@ process.on('SIGINT', () => {
 
 // handle unexpected app shutdowns
 process.on('SIGTERM',  () => {
-  logger.info(`APP: Shutdown crawler ${APP} ${pkg.version} with signal SIGTERM`)
+  logger.info(`APP: Shutdown crawler ${APP} ${VERSION} with signal SIGTERM`)
   stop().then(() => {
     process.exit(0)
   }).catch(() => {
