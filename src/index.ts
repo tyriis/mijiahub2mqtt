@@ -12,8 +12,9 @@ import { BridgeDAO } from './dao/bridge.dao'
 import { BridgeMQTT } from './dao/bridge.mqtt'
 import { Iconfig } from './model/config'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const config: Iconfig = configFromYaml('./configuration.yaml')
+const CONFIG_PATH = process.env.CONFIG_PATH || './configuration.yaml'
+
+const config: Iconfig = configFromYaml(CONFIG_PATH)
 config.app = {
   name: process.env.npm_package_name || 'xiaomi2mqtt',
   version: process.env.npm_package_version || 'unknown',

@@ -23,8 +23,9 @@ npm install
 |    | Description | Default |
 |:---|:------------|:--------|
 | **NODE_ENV** | _`production`_, _`development`_, _`test`_ | _`development`_ |
-| **NODE_LOG_FORMAT** | _`SIMPLE`_, _`JSON`_ | `JSON` |
-| **NODE_LOG_LEVEL** | _`fatal`_,  _`error`_, _`warn`_, _`info`_, _`trace`_, _`debug`_ | `info` |
+| **CONFIG_PATH** | path to configuration.yaml | _`./configuration.yaml`_ |
+| **NODE_LOG_FORMAT** | _`SIMPLE`_, _`JSON`_ | _`JSON`_ |
+| **NODE_LOG_LEVEL** | _`fatal`_,  _`error`_, _`warn`_, _`info`_, _`trace`_, _`debug`_ | _`info`_ |
 
 <br>
 <br>
