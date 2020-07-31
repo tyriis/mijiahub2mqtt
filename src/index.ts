@@ -3,34 +3,25 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 import { logger } from '@strg/logging-winston'
+import { configFromYaml } from './util/config/config.from.yaml'
 import { BridgeAPI } from './api/bridge.api'
 import { BridgeApiSocket } from './api/bridge.api.socket'
 import { BridgeService } from './service/bridge.service'
 import { BridgeServiceImpl } from './service/bridge.service.impl'
 import { BridgeDAO } from './dao/bridge.dao'
 import { BridgeMQTT } from './dao/bridge.mqtt'
-import { BridgeMqttOptions } from './dao/bridge.mqtt.options'
+import { Iconfig } from './model/config'
 
-logger.info(process.env.npm_package_name)
-
-// const NODE_ENV: string = process.env.NODE_ENV || 'development'
-// const PORT: number = Number(process.env.PORT) || 3000
-const MQTT_BASE_TOPIC: string = process.env.MQTT_BASE_TOPIC || 'xiaomi2mqtt'
-const MQTT_URL: string | undefined = process.env.MQTT_URL
-const MQTT_QOS: number = Number(process.env.MQTT_QOS) || 0
-
-const APP: string = process.env.npm_package_name || 'xiaomi2mqtt'
-const VERSION: string =  process.env.npm_package_version || 'unknown'
-
-logger.info(`APP: starting ${APP} ${VERSION}...`)
-
-const mqttOptions: BridgeMqttOptions = {
-  baseTopic: MQTT_BASE_TOPIC,
-  url: MQTT_URL,
-  qos: MQTT_QOS === 2 ? 2 : (MQTT_QOS === 1 ? 1 : 0),
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const config: Iconfig = configFromYaml('./configuration.yaml')
+config.app = {
+  name: process.env.npm_package_name || 'xiaomi2mqtt',
+  version: process.env.npm_package_version || 'unknown',
 }
 
-const dao: BridgeDAO = new BridgeMQTT(mqttOptions)
+logger.info(`APP: starting ${config.app.name} ${config.app.version}...`)
+
+const dao: BridgeDAO = new BridgeMQTT(config)
 const service: BridgeService = new BridgeServiceImpl(dao)
 const api: BridgeAPI = new BridgeApiSocket(service)
 
@@ -44,7 +35,7 @@ async function stop(): Promise<void> {
 
 // handle unexpected app shutdown
 process.on('SIGINT', () => {
-  logger.info(`APP: Shutdown crawler ${APP} ${VERSION} with signal SIGINT`)
+  logger.info(`APP: Shutdown ${config.app.name} ${config.app.version} with signal SIGINT`)
   stop().then(() => {
     process.exit(0)
   }).catch(() => {
@@ -54,7 +45,7 @@ process.on('SIGINT', () => {
 
 // handle unexpected app shutdowns
 process.on('SIGTERM',  () => {
-  logger.info(`APP: Shutdown crawler ${APP} ${VERSION} with signal SIGTERM`)
+  logger.info(`APP: Shutdown ${config.app.name} ${config.app.version} with signal SIGTERM`)
   stop().then(() => {
     process.exit(0)
   }).catch(() => {
@@ -68,7 +59,6 @@ process.on('uncaughtException', (ex: Error) => {
   stop().then(() => {
     process.exit(1)
   })
-
 })
 
 // handle unhandledRejection

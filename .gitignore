@@ -21,3 +21,6 @@ Thumbs.db
 
 # sonarlint
 /.sonarlint
+
+#configuration.yaml
+configuration.yaml

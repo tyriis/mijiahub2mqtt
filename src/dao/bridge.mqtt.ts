@@ -1,6 +1,5 @@
 import { DAOError } from '../error/dao.error'
 import { BridgeDAO } from './bridge.dao'
-import { BridgeMqttOptions } from './bridge.mqtt.options'
 import * as MQTT from 'async-mqtt'
 import { logger } from '@strg/logging-winston'
 import { Gateway } from '../model/gateway'
@@ -13,30 +12,27 @@ import { Cube } from '../model/cube'
 import { Sensor } from '../model/sensor'
 import { SmokeSensor } from '../model/smoke.sensor'
 import { WaterSensor } from '../model/water.sensor'
+import { Iconfig, IdeviceConfig } from '../model/config'
 
 export class BridgeMQTT implements BridgeDAO {
 
   private client: MQTT.AsyncMqttClient
-  private publishOptions: MQTT.IClientPublishOptions
 
-  constructor(private options: BridgeMqttOptions) {
-    this.publishOptions = {
-      qos: this.options.qos,
-      retain: false,
-    }
-    this.client = MQTT.connect(this.options.url, {
+  constructor(private config: Iconfig) {
+    this.client = MQTT.connect(this.config.mqtt.server, {
       will: {
-        topic: `${this.options.baseTopic}/bridge/state`,
+        topic: `${this.config.mqtt.base_topic}/bridge/state`,
         payload: 'offline',
-        qos: this.options.qos,
-        retain: true
+        qos: this.config.mqtt.qos,
+        retain: true,
       },
-      rejectUnauthorized: this.options.rejectUnauthorized
+      rejectUnauthorized: this.config.mqtt.reject_unauthorized,
     })
 
     this.client.on('connect', this.onConnect.bind(this))
     this.client.on('error', (e) => {
-      throw new DAOError(e.message, e) })
+      throw new DAOError(e.message, e)
+    })
   }
 
   public async setGateway(gateway: Gateway): Promise<void> {
@@ -76,10 +72,10 @@ export class BridgeMQTT implements BridgeDAO {
   }
 
   private onConnect(): void {
-    logger.info(`DAO: connected to ${this.options.url}`)
+    logger.info(`DAO: connected to ${this.config.mqtt.server}`)
 
-    this.client.publish(`${this.options.baseTopic}/bridge/state`, 'online', {
-      qos: this.options.qos,
+    this.client.publish(`${this.config.mqtt.base_topic}/bridge/state`, 'online', {
+      qos: this.config.mqtt.qos,
       retain: true,
     })
 
@@ -88,20 +84,27 @@ export class BridgeMQTT implements BridgeDAO {
   }
 
   /**
-   *
-   * @param sid
+   * publish a sensor state
    * @param {Sensor} sensor a sensor instance to publish
-   * @param {MQTT.IClientPublishOptions} publishOptions
    */
-  private async publish(sensor: Sensor, publishOptions?: MQTT.IClientPublishOptions): Promise<void> {
+  private async publish(sensor: Sensor): Promise<void> {
     try {
       const payload: string = JSON.stringify(sensor)
-      const topic: string = `${this.options.baseTopic}/${sensor.sid}`
+      const sensorConfig: IdeviceConfig = this.config.devices[sensor.sid] || {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        friendly_name: sensor.sid,
+        qos: this.config.mqtt.qos,
+        retain: false,
+      }
+      const topic: string = `${this.config.mqtt.base_topic}/${sensorConfig.friendly_name}`
       logger.debug(`DAO: publish @${topic}`, sensor)
       await this.client.publish(
         topic,
         payload,
-        publishOptions ? publishOptions : this.publishOptions
+        {
+          qos: sensorConfig.qos,
+          retain: !!sensorConfig.retain,
+        }
       )
     } catch(e) {
       throw new DAOError(e.message, e)

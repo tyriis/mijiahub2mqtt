@@ -65,6 +65,12 @@ export class BridgeApiSocket implements BridgeAPI {
     }
     logger.debug('API: messageHandler', msg)
 
+    // transform msg.sid to match pattern from zigbee2mqtt
+    while (msg.sid.length < 16) {
+      msg.sid = `0${msg.sid}`
+    }
+    msg.sid = `0x${msg.sid}`
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sensor: any = this.sensors[msg.sid] || {
       sid: msg.sid,

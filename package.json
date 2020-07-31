@@ -51,9 +51,11 @@
   },
   "dependencies": {
     "@strg/logging-winston": "^1.0.6",
+    "@types/js-yaml": "^3.12.5",
     "async-mqtt": "^2.6.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "js-yaml": "^3.14.0",
     "winston": "^3.3.3"
   },
   "repository": {
