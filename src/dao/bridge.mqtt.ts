@@ -12,13 +12,16 @@ import { Cube } from '../model/cube'
 import { Sensor } from '../model/sensor'
 import { SmokeSensor } from '../model/smoke.sensor'
 import { WaterSensor } from '../model/water.sensor'
-import { Iconfig, IdeviceConfig } from '../model/config'
+import { IConfig, IDeviceConfig } from '../model/config'
+import { IClientPublishOptions } from 'async-mqtt'
+import { BridgeMqttHomeAssistant } from './bridge.mqtt.home.assistant'
 
 export class BridgeMQTT implements BridgeDAO {
 
   private client: MQTT.AsyncMqttClient
+  private ha: BridgeMqttHomeAssistant
 
-  constructor(private config: Iconfig) {
+  constructor(private config: IConfig) {
     this.client = MQTT.connect(this.config.mqtt.server, {
       will: {
         topic: `${this.config.mqtt.baseTopic}/bridge/state`,
@@ -28,11 +31,18 @@ export class BridgeMQTT implements BridgeDAO {
       },
       rejectUnauthorized: this.config.mqtt.rejectUnauthorized,
     })
-
+    this.ha = new BridgeMqttHomeAssistant(this.client, this.config)
     this.client.on('connect', this.onConnect.bind(this))
     this.client.on('error', (e) => {
       throw new DAOError(e.message, e)
     })
+  }
+
+  private static getPublishOptions(sensorConfig: IDeviceConfig): IClientPublishOptions {
+    return {
+      qos: sensorConfig.qos,
+      retain: !!sensorConfig.retain,
+    }
   }
 
   public async setGateway(gateway: Gateway): Promise<void> {
@@ -40,7 +50,7 @@ export class BridgeMQTT implements BridgeDAO {
   }
 
   public async setMotion(motionSensor: MotionSensor): Promise<void> {
-    return this.publish(motionSensor)
+    await this.publish(motionSensor)
   }
 
   public async setButton(button: Button): Promise<void> {
@@ -90,23 +100,26 @@ export class BridgeMQTT implements BridgeDAO {
   private async publish(sensor: Sensor): Promise<void> {
     try {
       const payload: string = JSON.stringify(sensor)
-      const sensorConfig: IdeviceConfig = this.config.devices[sensor.sid] || {
-        friendlyName: sensor.sid,
-        qos: this.config.mqtt.qos,
-        retain: false,
-      }
-      const topic: string = `${this.config.mqtt.baseTopic}/${sensorConfig.friendlyName}`
+      const sensorConfig: IDeviceConfig = this.getSensorConfig(sensor)
+      const topic: string = this.getTopic(sensorConfig)
+      const pulbishOptions: IClientPublishOptions = BridgeMQTT.getPublishOptions(sensorConfig)
       logger.debug(`DAO: publish @${topic}`, sensor)
-      await this.client.publish(
-        topic,
-        payload,
-        {
-          qos: sensorConfig.qos,
-          retain: !!sensorConfig.retain,
-        }
-      )
+      await this.client.publish(topic, payload, pulbishOptions)
+      await this.ha.propagateSensor(sensor, sensorConfig, topic)
     } catch(e) {
       throw new DAOError(e.message, e)
+    }
+  }
+
+  private getTopic(sensorConfig: IDeviceConfig): string {
+    return `${this.config.mqtt.baseTopic}/${sensorConfig.friendlyName}`
+  }
+
+  private getSensorConfig(sensor: Sensor): IDeviceConfig {
+    return this.config.devices[sensor.sid] || {
+      friendlyName: sensor.sid,
+      qos: this.config.mqtt.qos,
+      retain: false,
     }
   }
 }

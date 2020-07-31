@@ -21,3 +21,4 @@ tslint.json
 .eslintrc.js
 .vscode
 README.md
+configuration.yaml

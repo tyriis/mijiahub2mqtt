@@ -10,11 +10,11 @@ import { BridgeService } from './service/bridge.service'
 import { BridgeServiceImpl } from './service/bridge.service.impl'
 import { BridgeDAO } from './dao/bridge.dao'
 import { BridgeMQTT } from './dao/bridge.mqtt'
-import { Iconfig } from './model/config'
+import { IConfig } from './model/config'
 
 const CONFIG_PATH = process.env.CONFIG_PATH || './configuration.yaml'
 
-const config: Iconfig = configFromYaml(CONFIG_PATH)
+const config: IConfig = configFromYaml(CONFIG_PATH)
 config.app = {
   name: process.env.npm_package_name || 'xiaomi2mqtt',
   version: process.env.npm_package_version || 'unknown',

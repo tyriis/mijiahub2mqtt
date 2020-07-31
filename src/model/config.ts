@@ -1,26 +1,26 @@
 import { QoS } from 'mqtt'
 
-interface ImqttConfig {
+interface IMqttConfig {
   baseTopic: string
   server: string
   qos: QoS
   rejectUnauthorized: boolean
 }
 
-export interface IdeviceConfig {
+export interface IDeviceConfig {
   friendlyName: string
   retain: boolean
   qos: QoS
 }
 
-interface IappConfig {
+interface IAppConfig {
   name: string
   version: string
 }
 
-export interface Iconfig {
-  app: IappConfig
+export interface IConfig {
+  app: IAppConfig
   homeassistant: boolean
-  mqtt: ImqttConfig
-  devices: {[key: string]: IdeviceConfig}
+  mqtt: IMqttConfig
+  devices: {[key: string]: IDeviceConfig}
 }
