@@ -189,6 +189,8 @@ export class BridgeApiSocket implements BridgeAPI {
         await this.waterSensorHandler(new WaterSensor(sensor))
       } else if (sensor.model === 'smoke') {
         await this.smokeSensorHandler(new SmokeSensor(sensor))
+      } else {
+        logger.warn(`API: handleSensorUpdate => ${sensor.model} not implemented, please create an issue or pull request on Github`)
       }
     } catch (e) {
       if (e instanceof ValidationError || e instanceof ServiceError) {

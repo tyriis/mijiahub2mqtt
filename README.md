@@ -2,6 +2,14 @@
 Service provides a bridge between xiaomi mijia bridge with development mode enabled and mqtt
 inspired by [zigbee2mqtt](https://www.zigbee2mqtt.io/) and [node-xiaomi-smart-home](https://github.com/quibusus/node-xiaomi-smart-home)
 
+## Limitations
+currently not all devices are impelemented properly :/, feel free to create a ticket/pull request
+when your device is not fully implemented you get a warning in the log
+```
+ ... <device-identifier> not implemented, please create an issue or pull request on Github.
+```
+if you create an issue, please leave all informations required: device name, device identifier from log, device type...
+
 ## Getting Started
 
 ### Prerequisites
