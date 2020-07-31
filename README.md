@@ -35,20 +35,20 @@ npm install
 # mqtt section
 mqtt:
   # mqtt base topic, all messages get prefixed with this namespace
-  base_topic: mijia2mqtt
+  baseTopic: mijia2mqtt
   # the mqtt server url
   server: mqtt://127.0.0.1
   # the default QoS for MQTT messages, can be overwritten in devices section, default is 0
   qos: 2
   # In case mqtts (mqtt over tls) is required, the options object is passed through to tls.connect(). If you are using a self-signed certificate, pass the rejectUnauthorized: false option. 
-  reject_unauthorized: false
+  rejectUnauthorized: false
 devices:
   '0x000004cf8ca084d0':
-    friendly_name: mijia hub
+    friendlyName: mijia hub
     retain: false
     qos: 0
   '0x00158d00027a108c':
-    friendly_name: mijia motion office
+    friendlyName: mijia motion office
     retain: true
     qos: 1
 

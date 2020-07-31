@@ -1,16 +1,14 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { QoS } from 'mqtt'
 
 interface ImqttConfig {
-  base_topic: string
+  baseTopic: string
   server: string
   qos: QoS
-  reject_unauthorized: boolean
+  rejectUnauthorized: boolean
 }
 
 export interface IdeviceConfig {
-  friendly_name: string
+  friendlyName: string
   retain: boolean
   qos: QoS
 }

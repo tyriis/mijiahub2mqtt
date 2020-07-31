@@ -21,12 +21,12 @@ export class BridgeMQTT implements BridgeDAO {
   constructor(private config: Iconfig) {
     this.client = MQTT.connect(this.config.mqtt.server, {
       will: {
-        topic: `${this.config.mqtt.base_topic}/bridge/state`,
+        topic: `${this.config.mqtt.baseTopic}/bridge/state`,
         payload: 'offline',
         qos: this.config.mqtt.qos,
         retain: true,
       },
-      rejectUnauthorized: this.config.mqtt.reject_unauthorized,
+      rejectUnauthorized: this.config.mqtt.rejectUnauthorized,
     })
 
     this.client.on('connect', this.onConnect.bind(this))
@@ -74,7 +74,7 @@ export class BridgeMQTT implements BridgeDAO {
   private onConnect(): void {
     logger.info(`DAO: connected to ${this.config.mqtt.server}`)
 
-    this.client.publish(`${this.config.mqtt.base_topic}/bridge/state`, 'online', {
+    this.client.publish(`${this.config.mqtt.baseTopic}/bridge/state`, 'online', {
       qos: this.config.mqtt.qos,
       retain: true,
     })
@@ -91,12 +91,11 @@ export class BridgeMQTT implements BridgeDAO {
     try {
       const payload: string = JSON.stringify(sensor)
       const sensorConfig: IdeviceConfig = this.config.devices[sensor.sid] || {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        friendly_name: sensor.sid,
+        friendlyName: sensor.sid,
         qos: this.config.mqtt.qos,
         retain: false,
       }
-      const topic: string = `${this.config.mqtt.base_topic}/${sensorConfig.friendly_name}`
+      const topic: string = `${this.config.mqtt.baseTopic}/${sensorConfig.friendlyName}`
       logger.debug(`DAO: publish @${topic}`, sensor)
       await this.client.publish(
         topic,
