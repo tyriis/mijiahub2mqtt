@@ -1,6 +1,6 @@
 {
   "name": "xiaomi2mqtt",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "xiaomi mijia hub mqtt bridge",
   "main": "index.js",
   "scripts": {
