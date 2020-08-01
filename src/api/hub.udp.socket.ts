@@ -2,7 +2,7 @@
 import { ServiceError } from '../error/service.error'
 import { ValidationError } from '../error/validation.error'
 import { BridgeService } from '../service/bridge.service'
-import { BridgeAPI } from './bridge.api'
+import { HubAPI } from './hub.api'
 import { logger } from '@strg/logging-winston'
 import { createSocket, Socket } from 'dgram'
 import { Gateway } from '../model/gateway'
@@ -20,7 +20,7 @@ const WHOIS_CMD: string = '{"cmd": "whois"}'
 const MIN_VOLTAGE: number = 2000
 const MAX_VOLTAGE: number = 3300
 
-export class BridgeApiSocket implements BridgeAPI {
+export class HubUdpSocket implements HubAPI {
 
   private socket: Socket
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

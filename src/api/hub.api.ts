@@ -8,7 +8,7 @@ import { Button } from '../model/button'
 import { Cube } from '../model/cube'
 import { SmokeSensor } from '../model/smoke.sensor'
 
-export interface BridgeAPI {
+export interface HubAPI {
 
   /**
    * gateway sensor handler

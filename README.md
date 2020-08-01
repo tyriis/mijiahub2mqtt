@@ -1,4 +1,4 @@
-# xiaomi2mqtt
+# mijiahub2mqtt
 Service provides a bridge between xiaomi mijia bridge with development mode enabled and mqtt
 inspired by [zigbee2mqtt](https://www.zigbee2mqtt.io/) and [node-xiaomi-smart-home](https://github.com/quibusus/node-xiaomi-smart-home)
 
@@ -43,7 +43,7 @@ npm install
 # mqtt section
 mqtt:
   # mqtt base topic, all messages get prefixed with this namespace
-  baseTopic: mijia2mqtt
+  baseTopic: mijiahub2mqtt
   # the mqtt server url
   server: mqtt://127.0.0.1
   # the default QoS for MQTT messages, can be overwritten in devices section, default is 0
@@ -63,7 +63,7 @@ devices:
 ```
 
 ## Specification
-The service communicates over udp port 9898 (multicast) with the mijia hub.
+The service communicates over udp port 9898 (multicast) with the mijia hub, and publish the sensor states to MQTT
 <br>
 <br>
 
