@@ -37,7 +37,7 @@ export class BridgeMqttHomeAssistant {
       return this.propagateWeatherSensor(sensor, sensorConfig, topic)
     if (sensor.model === 'magnet' || sensor.model === 'magnet.aq2')
       return this.propagateMagnetSensor(sensor, sensorConfig, topic)
-    logger.warn(`DAO: BridgeMqttHomeAssistant => ${sensor.model} not implemented`)
+    logger.warn(`DAO: BridgeMqttHomeAssistant => ${sensor.model} not implemented, please create an issue or pull request on Github`)
   }
 
   public async propagateMotionSensor(sensor: MotionSensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
@@ -150,10 +150,6 @@ export class BridgeMqttHomeAssistant {
   // eslint-disable-next-line @typescript-eslint/ban-types
   private getBasePayload(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): object {
     return {
-      payload_on: true,
-      payload_off: false,
-      value_template: '{{ value_json.occupancy }}',
-      device_class: 'motion',
       state_topic: topic,
       json_attributes_topic: topic,
       name: sensorConfig.friendlyName,
