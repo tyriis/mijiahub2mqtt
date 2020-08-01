@@ -1,3 +1,16 @@
+FROM node:12-alpine AS build
+
+# Create app directory
+WORKDIR /home/node/app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
 FROM node:12-alpine
 
 # Create app directory
@@ -10,8 +23,8 @@ COPY package*.json ./
 
 RUN npm install --production
 
-# Bundle app source
-COPY . .
+# copy bundle from build
+COPY --from=build /home/node/app/build .
 
 # switch to user node (uid=1000)
 USER node
