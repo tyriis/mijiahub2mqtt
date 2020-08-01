@@ -77,6 +77,7 @@ export class BridgeMqttHomeAssistant {
       payload_off: true,
       value_template: '{{ value_json.contact }}',
       device_class: 'door',
+      unique_id: `${sensor.sid}_door_${this.config.app.name}`,
     }
     await this.client.publish(
       `homeassistant/binary_sensor/${sensor.sid}/contact/config`,
@@ -90,7 +91,8 @@ export class BridgeMqttHomeAssistant {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: '%',
       device_class: 'battery',
-      value_template: '{{ value_json.battery }}'
+      value_template: '{{ value_json.battery }}',
+      unique_id: `${sensor.sid}_battery_${this.config.app.name}`,
     }
     await this.client.publish(
       `homeassistant/sensor/${sensor.sid}/battery/config`,
@@ -102,7 +104,8 @@ export class BridgeMqttHomeAssistant {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: 'mV',
       icon: 'mdi-battery-charging',
-      value_template: '{{ value_json.voltage }}'
+      value_template: '{{ value_json.voltage }}',
+      unique_id: `${sensor.sid}_voltage_${this.config.app.name}`,
     }
     await this.client.publish(
       `homeassistant/sensor/${sensor.sid}/voltage/config`,
@@ -114,7 +117,8 @@ export class BridgeMqttHomeAssistant {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: '°C',
       device_class: 'temperature',
-      value_template: '{{ value_json.temperature }}'
+      value_template: '{{ value_json.temperature }}',
+      unique_id: `${sensor.sid}_temperature_${this.config.app.name}`,
     }
     await this.client.publish(
       `homeassistant/sensor/${sensor.sid}/temperature/config`,
@@ -126,7 +130,8 @@ export class BridgeMqttHomeAssistant {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: '%',
       device_class: 'humidity',
-      value_template: '{{ value_json.humidity }}'
+      value_template: '{{ value_json.humidity }}',
+      unique_id: `${sensor.sid}_humidity_${this.config.app.name}`,
     }
     await this.client.publish(
       `homeassistant/sensor/${sensor.sid}/humidity/config`,
@@ -138,7 +143,8 @@ export class BridgeMqttHomeAssistant {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: 'hPa',
       device_class: 'pressure',
-      value_template: '{{ value_json.pressure }}'
+      value_template: '{{ value_json.pressure }}',
+      unique_id: `${sensor.sid}_pressure_${this.config.app.name}`,
     }
     await this.client.publish(
       `homeassistant/sensor/${sensor.sid}/pressure/config`,
@@ -153,7 +159,6 @@ export class BridgeMqttHomeAssistant {
       state_topic: topic,
       json_attributes_topic: topic,
       name: sensorConfig.friendlyName,
-      unique_id: `${sensor.sid}_occupancy_${this.config.app.name}`,
       device: {
         identifiers:[
           `${this.config.app.name}_${sensor.sid}`
