@@ -24,7 +24,7 @@ COPY package*.json ./
 RUN npm install --production
 
 # copy bundle from build
-COPY --from=build /home/node/app/build .
+COPY --from=build /home/node/app/build ./build
 
 # switch to user node (uid=1000)
 USER node
