@@ -28,8 +28,6 @@ const dao: BridgeDAO = new BridgeMQTT(config)
 const service: BridgeService = new BridgeServiceImpl(dao)
 const api: HubAPI = new HubUdpSocket(service)
 
-logger.info(`APP: started ${config.app.name} ${config.app.version}.`)
-
 // shutdown routine
 async function shutdown(): Promise<void> {
   try {
