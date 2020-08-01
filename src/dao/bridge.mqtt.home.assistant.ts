@@ -103,7 +103,7 @@ export class BridgeMqttHomeAssistant {
   private async propagateVoltageSensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: 'mV',
-      icon: 'mdi-battery-charging',
+      icon: 'mdi:battery-charging',
       value_template: '{{ value_json.voltage }}',
       unique_id: `${sensor.sid}_voltage_${this.config.app.name}`,
     }
