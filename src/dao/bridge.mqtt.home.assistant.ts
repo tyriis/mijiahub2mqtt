@@ -35,7 +35,7 @@ export class BridgeMqttHomeAssistant {
       return this.propagateMotionSensor(sensor, sensorConfig, topic)
     if (sensor.model === 'sensor_ht' || sensor.model === 'weather.v1')
       return this.propagateWeatherSensor(sensor, sensorConfig, topic)
-    if (sensor.model === 'magnet' || sensor.model === 'magnet.aq2')
+    if (sensor.model === 'magnet' || sensor.model === 'sensor_magnet.aq2')
       return this.propagateMagnetSensor(sensor, sensorConfig, topic)
     logger.warn(`DAO: BridgeMqttHomeAssistant => ${sensor.model} not implemented, please create an issue or pull request on Github`)
   }
