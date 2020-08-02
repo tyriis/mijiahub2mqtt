@@ -13,7 +13,7 @@ const deviceNames: {[key: string]: string} = {
   'sensor_ht': 'MiJia temperature & humidity sensor (WSDCGQ01LM)',
   'weather.v1': 'Aqara temperature, humidity and pressure sensor (WSDCGQ11LM)',
   'magnet': 'MiJia door & window contact sensor (MCCGQ01LM)',
-  'magnet.aq2': 'Aqara door & window contact sensor (MCCGQ11LM)',
+  'sensor_magnet.aq2': 'Aqara door & window contact sensor (MCCGQ11LM)',
 }
 
 export class BridgeMqttHomeAssistant {
