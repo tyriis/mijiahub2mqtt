@@ -58,9 +58,6 @@ export class BridgeMqttHomeAssistant {
   }
 
   public async propagateWeatherSensor(sensor: WeatherSensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
-    if (this.hasBeenPropagated(sensor)) {
-      return
-    }
     await this.propagateTemperatureSensor(sensor, sensorConfig, topic)
     await this.propagateHumiditySensor(sensor, sensorConfig, topic)
     if (sensor.model === 'weather.v1') {
@@ -71,9 +68,6 @@ export class BridgeMqttHomeAssistant {
   }
 
   public async propagateMagnetSensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
-    if (this.hasBeenPropagated(sensor)) {
-      return
-    }
     const payload: {[key: string]: string | boolean} = {
       payload_on: false,
       payload_off: true,
