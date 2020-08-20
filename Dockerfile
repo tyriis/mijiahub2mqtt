@@ -1,4 +1,4 @@
-FROM node:12-alpine AS build
+FROM node:14-alpine AS build
 
 # Create app directory
 WORKDIR /home/node/app
@@ -11,7 +11,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:12-alpine
+FROM node:14-alpine
 
 # Create app directory
 WORKDIR /home/node/app
