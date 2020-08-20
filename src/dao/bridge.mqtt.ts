@@ -12,7 +12,7 @@ import { Cube } from '../model/cube'
 import { Sensor } from '../model/sensor'
 import { SmokeSensor } from '../model/smoke.sensor'
 import { WaterSensor } from '../model/water.sensor'
-import { IConfig, IDeviceConfig } from '../model/config'
+import { Config, DeviceConfig } from '../model/config'
 import { IClientPublishOptions } from 'async-mqtt'
 import { BridgeMqttHomeAssistant } from './bridge.mqtt.home.assistant'
 
@@ -21,7 +21,7 @@ export class BridgeMQTT implements BridgeDAO {
   private client: MQTT.AsyncMqttClient
   private ha: BridgeMqttHomeAssistant
 
-  constructor(private config: IConfig) {
+  constructor(private config: Config) {
     this.client = MQTT.connect(this.config.mqtt.server, {
       will: {
         topic: `${this.config.mqtt.baseTopic}/bridge/state`,
@@ -38,7 +38,7 @@ export class BridgeMQTT implements BridgeDAO {
     })
   }
 
-  private static getPublishOptions(sensorConfig: IDeviceConfig): IClientPublishOptions {
+  private static getPublishOptions(sensorConfig: DeviceConfig): IClientPublishOptions {
     return {
       qos: sensorConfig.qos,
       retain: !!sensorConfig.retain,
@@ -100,7 +100,7 @@ export class BridgeMQTT implements BridgeDAO {
   private async publish(sensor: Sensor): Promise<void> {
     try {
       const payload: string = JSON.stringify(sensor)
-      const sensorConfig: IDeviceConfig = this.getSensorConfig(sensor)
+      const sensorConfig: DeviceConfig = this.getSensorConfig(sensor)
       const topic: string = this.getTopic(sensorConfig)
       const pulbishOptions: IClientPublishOptions = BridgeMQTT.getPublishOptions(sensorConfig)
       logger.debug(`DAO: publish @${topic}`, sensor)
@@ -111,15 +111,16 @@ export class BridgeMQTT implements BridgeDAO {
     }
   }
 
-  private getTopic(sensorConfig: IDeviceConfig): string {
+  private getTopic(sensorConfig: DeviceConfig): string {
     return `${this.config.mqtt.baseTopic}/${sensorConfig.friendlyName}`
   }
 
-  private getSensorConfig(sensor: Sensor): IDeviceConfig {
+  private getSensorConfig(sensor: Sensor): DeviceConfig {
     return this.config.devices[sensor.sid] || {
       friendlyName: sensor.sid,
       qos: this.config.mqtt.qos,
       retain: false,
     }
   }
+
 }

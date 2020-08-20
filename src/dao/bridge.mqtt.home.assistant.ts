@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as MQTT from 'async-mqtt'
 import { Sensor } from '../model/sensor'
-import { IDeviceConfig, IConfig } from '../model/config'
+import { DeviceConfig, Config } from '../model/config'
 import { MotionSensor } from '../model/motion.sensor'
 import { IClientPublishOptions } from 'async-mqtt'
 import { WeatherSensor } from '../model/weather.sensor'
@@ -20,13 +20,13 @@ export class BridgeMqttHomeAssistant {
 
   private propagated: string[] = []
 
-  constructor(private client: MQTT.AsyncMqttClient, private config: IConfig) { }
+  constructor(private client: MQTT.AsyncMqttClient, private config: Config) { }
 
   private hasBeenPropagated(sensor: Sensor): boolean {
     return !this.config.homeassistant || this.propagated.indexOf(sensor.sid) >= 0
   }
 
-  public async propagateSensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  public async propagateSensor(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     if (this.hasBeenPropagated(sensor)) {
       return
     }
@@ -40,7 +40,7 @@ export class BridgeMqttHomeAssistant {
     logger.warn(`DAO: BridgeMqttHomeAssistant => ${sensor.model} not implemented, please create an issue or pull request on Github`)
   }
 
-  public async propagateMotionSensor(sensor: MotionSensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  public async propagateMotionSensor(sensor: MotionSensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       payload_on: true,
       payload_off: false,
@@ -57,7 +57,7 @@ export class BridgeMqttHomeAssistant {
     await this.propagateVoltageSensor(sensor, sensorConfig, topic)
   }
 
-  public async propagateWeatherSensor(sensor: WeatherSensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  public async propagateWeatherSensor(sensor: WeatherSensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     await this.propagateTemperatureSensor(sensor, sensorConfig, topic)
     await this.propagateHumiditySensor(sensor, sensorConfig, topic)
     if (sensor.model === 'weather.v1') {
@@ -67,7 +67,7 @@ export class BridgeMqttHomeAssistant {
     await this.propagateVoltageSensor(sensor, sensorConfig, topic)
   }
 
-  public async propagateMagnetSensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  public async propagateMagnetSensor(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       payload_on: false,
       payload_off: true,
@@ -84,7 +84,7 @@ export class BridgeMqttHomeAssistant {
     await this.propagateVoltageSensor(sensor, sensorConfig, topic)
   }
 
-  private async propagateBatterySensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  private async propagateBatterySensor(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: '%',
       device_class: 'battery',
@@ -98,7 +98,7 @@ export class BridgeMqttHomeAssistant {
       this.getPublishOptions(sensorConfig))
   }
 
-  private async propagateVoltageSensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  private async propagateVoltageSensor(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: 'mV',
       icon: 'mdi:battery-charging',
@@ -112,7 +112,7 @@ export class BridgeMqttHomeAssistant {
       this.getPublishOptions(sensorConfig))
   }
 
-  private async propagateTemperatureSensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  private async propagateTemperatureSensor(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: '°C',
       device_class: 'temperature',
@@ -126,7 +126,7 @@ export class BridgeMqttHomeAssistant {
       this.getPublishOptions(sensorConfig))
   }
 
-  private async propagateHumiditySensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  private async propagateHumiditySensor(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: '%',
       device_class: 'humidity',
@@ -140,7 +140,7 @@ export class BridgeMqttHomeAssistant {
       this.getPublishOptions(sensorConfig))
   }
 
-  private async propagatePressureSensor(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): Promise<void> {
+  private async propagatePressureSensor(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): Promise<void> {
     const payload: {[key: string]: string | boolean} = {
       unit_of_measurement: 'hPa',
       device_class: 'pressure',
@@ -154,9 +154,8 @@ export class BridgeMqttHomeAssistant {
       this.getPublishOptions(sensorConfig))
   }
 
-
   // eslint-disable-next-line @typescript-eslint/ban-types
-  private getBasePayload(sensor: Sensor, sensorConfig: IDeviceConfig, topic: string): object {
+  private getBasePayload(sensor: Sensor, sensorConfig: DeviceConfig, topic: string): object {
     return {
       state_topic: topic,
       json_attributes_topic: topic,
@@ -173,7 +172,7 @@ export class BridgeMqttHomeAssistant {
     }
   }
 
-  private getPublishOptions(sensorConfig: IDeviceConfig): IClientPublishOptions {
+  private getPublishOptions(sensorConfig: DeviceConfig): IClientPublishOptions {
     return {
       qos: sensorConfig.qos,
       retain: true,
